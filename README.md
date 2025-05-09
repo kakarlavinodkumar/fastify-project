@@ -5,16 +5,21 @@ This is a simple Fastify application built with TypeScript. It serves as a templ
 ## Project Structure
 
 ```
-my-fastify-app
+├── README.md           # Project documentation
+├── tsconfig.json       # TypeScript configuration
 ├── src
 │   ├── app.ts          # Entry point of the application
 │   ├── routes          # Contains route definitions
 │   │   └── index.ts    # Route handler
 │   └── plugins         # Contains Fastify plugins
 │       └── index.ts    # Plugin registration
+├── test                # Contains test cases for the application
+│   └── app.test.ts     # Example test file
+├── public              # Static files served by the application
+│   └── index.html      # Example static file
+├── .gitignore          # Git ignore rules
 ├── package.json        # NPM configuration
-├── tsconfig.json       # TypeScript configuration
-└── README.md           # Project documentation
+├── package-lock.json   # NPM lock file
 ```
 
 ## Installation
