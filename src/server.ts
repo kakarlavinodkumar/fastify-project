@@ -8,10 +8,7 @@ export const start = async () => {
 
   try {
     registerPlugins(app);
-    
-    // Register routes
-    app.register(setupRoutes, { prefix: '/api/v1/mercury' });
-    
+        
     await app.listen({ port: config.PORT });
     console.log('Server is running at http://localhost:3000');
   } catch (err) {
