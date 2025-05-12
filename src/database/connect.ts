@@ -1,20 +1,26 @@
+import fastifyPlugin from 'fastify-plugin';
+import { FastifyInstance } from 'fastify';
 import { Client } from 'pg';
 
-export const connect = async () => {
+// postgres://postgres:postgres@localhost:5432/postgres
+async function dbConnector(fastify: FastifyInstance) {
     const client = new Client({
-        user: 'your_username',
-        host: 'localhost',
-        database: 'your_database',
-        password: 'your_password',
-        port: 5432, // Default PostgreSQL port
+        connectionString: 'postgres://postgres:postgres@localhost:5432/postgres',
     });
 
     try {
         await client.connect();
-        console.log('Connected to PostgreSQL database');
-        return client;
-    } catch (error) {
-        console.error('Failed to connect to PostgreSQL database:', error);
-        throw error;
+        fastify.decorate('pg', client);
+
+        fastify.log.info('Database connected successfully');
+        fastify.addHook('onClose', (instance, done) => {
+            client.end().then(() => done()).catch(done);
+        });
+        
+    } catch (err) {
+        fastify.log.error(err);
+        throw err;
     }
-};
+}
+
+export const setupDB = fastifyPlugin(dbConnector);
