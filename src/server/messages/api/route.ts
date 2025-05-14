@@ -1,71 +1,42 @@
 import { FastifyInstance } from 'fastify';
-
-interface Message {
-    id: number;
-    content: string;
-}
-
-let messages: Message[] = [];
-let idCounter = 1;
+import { UpdateMessagePayload, UpdateMessageResponse } from '../struct';
+import { updateMessageService } from '../service/messageservice';
+import { HTTP_RESPONSE_CODES } from '../../../appconstants/httpresponsecodes';
 
 export async function messageRoutes(fastify: FastifyInstance) {
     // Create a new message
     fastify.post('/', async (request, reply) => {
-        const { content } = request.body as { content: string };
-        if (!content) {
-            return reply.status(400).send({ error: 'Content is required' });
-        }
-
-        const newMessage: Message = { id: idCounter++, content };
-        messages.push(newMessage);
-        return reply.status(201).send(newMessage);
+        return reply.status(201).send({ message: "success"});
     });
 
     // Get all messages
     fastify.get('/', async (request, reply) => {
-        return reply.send(messages);
+        return reply.send([]);
     });
 
     // Get a single message by ID
     fastify.get('/:id', async (request, reply) => {
-        const { id } = request.params as { id: string };
-        const message = messages.find((msg) => msg.id === parseInt(id, 10));
-
-        if (!message) {
-            return reply.status(404).send({ error: 'Message not found' });
-        }
-
-        return reply.send(message);
+        return reply.send({message: "success"});
     });
 
     // Update a message by ID
-    fastify.put('/:id', async (request, reply) => {
-        const { id } = request.params as { id: string };
-        const { content } = request.body as { content: string };
-
-        if (!content) {
-            return reply.status(400).send({ error: 'Content is required' });
+    fastify.put<{ Body: UpdateMessagePayload }>('/', async (request, reply) => {
+        try {
+            // Payload
+            const payload = request.body;
+    
+            // Service call
+            const response: UpdateMessageResponse = await updateMessageService(fastify, payload);
+    
+            // Response
+            reply.status(HTTP_RESPONSE_CODES.SUCCESS).send(response);
+        } catch (err: any) {
+            reply.status(err.code || HTTP_RESPONSE_CODES.BAD_REQUEST).send({ message: err.message ||  "Bad request" });
         }
-
-        const messageIndex = messages.findIndex((msg) => msg.id === parseInt(id, 10));
-        if (messageIndex === -1) {
-            return reply.status(404).send({ error: 'Message not found' });
-        }
-
-        messages[messageIndex].content = content;
-        return reply.send(messages[messageIndex]);
     });
 
     // Delete a message by ID
     fastify.delete('/:id', async (request, reply) => {
-        const { id } = request.params as { id: string };
-        const messageIndex = messages.findIndex((msg) => msg.id === parseInt(id, 10));
-
-        if (messageIndex === -1) {
-            return reply.status(404).send({ error: 'Message not found' });
-        }
-
-        const deletedMessage = messages.splice(messageIndex, 1)[0];
-        return reply.send(deletedMessage);
+        return reply.send({message: "success"});
     });
 }
