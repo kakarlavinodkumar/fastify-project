@@ -21,7 +21,7 @@ export class Message {
         type: 'enum',
         enum: ['Sent', 'Scheduled', 'Paused'],
     })
-    status!: 'Sent' | 'Scheduled' | 'Paused';
+    action!: 'Sent' | 'Scheduled' | 'Paused';
 
     @Column({
         type: 'enum',
