@@ -4,20 +4,6 @@ import { updateMessageService } from '../service/messageservice';
 import { HTTP_RESPONSE_CODES } from '../../../appconstants/httpresponsecodes';
 
 export async function messageRoutes(fastify: FastifyInstance) {
-    // Create a new message
-    fastify.post('/', async (request, reply) => {
-        return reply.status(201).send({ message: "success"});
-    });
-
-    // Get all messages
-    fastify.get('/', async (request, reply) => {
-        return reply.send([]);
-    });
-
-    // Get a single message by ID
-    fastify.get('/:id', async (request, reply) => {
-        return reply.send({message: "success"});
-    });
 
     // Update a message by ID
     fastify.put<{ Body: UpdateMessagePayload }>('/', async (request, reply) => {
@@ -35,8 +21,4 @@ export async function messageRoutes(fastify: FastifyInstance) {
         }
     });
 
-    // Delete a message by ID
-    fastify.delete('/:id', async (request, reply) => {
-        return reply.send({message: "success"});
-    });
 }
