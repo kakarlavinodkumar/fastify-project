@@ -1,0 +1,1 @@
+export const DAP_GET_FLIGHTS_END_POINT = 'test'
