@@ -19,9 +19,9 @@ export class Message {
 
     @Column({
         type: 'enum',
-        enum: ['Sent', 'Scheduled', 'Paused'],
+        enum: ['Sent', 'Scheduled', 'Paused', 'UnScheduled'],
     })
-    action!: 'Sent' | 'Scheduled' | 'Paused';
+    action!: 'Sent' | 'Scheduled' | 'Paused' | 'UnScheduled';
 
     @Column({
         type: 'enum',
@@ -34,4 +34,7 @@ export class Message {
 
     @Column()
     message!: string
+
+    @Column()
+    templateId!: string;
 }
